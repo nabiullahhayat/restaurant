@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import foods from '../Data/foods.json'
-import Security from "./security";
+import Security from "./Security"
 
 
 function AdminPanel() {
