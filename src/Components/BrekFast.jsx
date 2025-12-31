@@ -1,10 +1,18 @@
-import { useState } from "react";
-import foods from '../Data/foods.json';
+import { useState, useEffect } from "react";
+
 
 function BrekFast() {
+  const [foods , setFoods] = useState([])
   const [quantities, setQuantities] = useState({});
   const [cart, setCart] = useState({});
   const [table, setTable] = useState("");
+
+  useEffect(() => {
+    const data = localStorage.getItem('FoodData');
+    if(data) {
+      setFoods(JSON.parse(data))
+    }
+  }, [])
 
  
   const increase = (id) => {

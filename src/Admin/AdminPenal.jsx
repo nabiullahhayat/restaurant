@@ -1,14 +1,61 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
-import foods from '../Data/foods.json'
-import Security from "./Security"
 
+const items = []
 
+const foodDataStorage=()=>{
+   const data = localStorage.getItem('FoodData');
+
+   try{
+return data?JSON.parse(data):items;
+   }catch(err){
+console.log(err.message)
+return items
+   }
+   
+}
 function AdminPanel() {
+
+  const [name, setName] = useState('');   
+  const [price, setPrice] = useState('');
+  const [category, setCategory] = useState('');
+  const [image, setImage] = useState('');
+  const [enterFoodData, setEnterFoodData] = useState(() => foodDataStorage());
+
+  useEffect(()=>{
+
+  localStorage.setItem('FoodData',JSON.stringify(enterFoodData))
+
+  },[enterFoodData])
+
+
+    const  submithandler= (e) => {
+    e.preventDefault()
+
+    const foodData={
+    id:Date.now(),
+    name,
+    price,
+    category,
+    image }
+
+   setEnterFoodData(pre => [...pre,{...foodData}])
+
+      console.log(foodData)
+        }
+
+  const deletFood = (foodId) => {
+    const updateFoods = enterFoodData.filter(food => food.id !== foodId)
+
+    setEnterFoodData(updateFoods);
+
+    localStorage.setItem('FoodData', JSON.stringify(updateFoods));
+  }
+
   const [modal, setModal] = useState(null); 
 
   const [selectedFood, setSelectedFood] = useState(null);
-  const food = foods;
+ 
 
   const openEditModal = (food) => {
     setSelectedFood(food);
@@ -21,6 +68,10 @@ function AdminPanel() {
     
   };
 
+
+
+  
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center p-6 sm:p-10 space-y-8 relative">
 
@@ -32,7 +83,6 @@ function AdminPanel() {
      
       <div className="flex space-x-6">
          <button onClick={() => setModal("add")} className='bg-yellow-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:scale-105 hover:shadow-yellow-400 transition-transform'>Add Food</button>
-            <Security />
        </div>
 
       
@@ -55,7 +105,7 @@ function AdminPanel() {
               </tr>
             </thead>
             <tbody>
-              {food.map((food, index) => (
+              {enterFoodData.map((food, index) => (
                 <tr key={index} className="border-b hover:bg-yellow-50 transition">
                   <td className="p-3 text-gray-800">{food.name}</td>
                   <td className="p-3 text-gray-800">{food.price + '$'}</td>
@@ -74,7 +124,7 @@ function AdminPanel() {
                     />
                   </td>
                 </tr>
-              ))}
+           ))}
             </tbody>
           </table>
         </div>
@@ -91,22 +141,56 @@ function AdminPanel() {
             
             <button onClick={() => setModal(null)} className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 font-bold"> X </button>
 
-            
             {modal === "add" && (
-              <div className="flex flex-col space-y-4">
-                <h2 className="text-2xl font-bold text-yellow-600 text-center">Add Food</h2>
-                <input type="text" placeholder="Food Name" className="border-2 border-yellow-600 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-400 text-black"/>
-                <input type="number" placeholder="$Price" className="border-2 border-yellow-600 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-400 text-black"/>
-                <select className="border-2 border-yellow-600 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 bg-white text-gray-800">
-                  <option value="">Select Category</option>
-                  <option value="Breakfast">Breakfast</option>
-                  <option value="Lunch">Lunch & Dinner</option>
-                  <option value="Drinks">Drinks</option>
-                </select>
-                <input type="text" placeholder="Image URL" className="border-2 border-yellow-600 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-400 text-black"/>
-                <button className='bg-yellow-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:scale-105 hover:shadow-yellow-400 transition-transform'>Add Food</button>
-              </div>
-            )}
+  <div className="flex flex-col space-y-6">
+    <h2 className="text-2xl font-bold text-yellow-600 text-center">Add Food</h2>
+
+    <form onSubmit={submithandler} className="flex flex-col space-y-4">
+      <input
+        type="text"
+        placeholder="Food Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        className="border-2 border-yellow-600 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-400 text-black"
+      />
+
+      <input
+        type="number"
+        placeholder="$Price"
+        value={price}
+        onChange={(e) => setPrice(e.target.value)}
+        className="border-2 border-yellow-600 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-400 text-black"
+      />
+
+      <select
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        className="border-2 border-yellow-600 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 bg-white text-gray-800"
+      >
+        <option value="">Select Category</option>
+        <option value="Breakfast">Breakfast</option>
+        <option value="Lunch">Lunch & Dinner</option>
+        <option value="Drinks">Drinks</option>
+      </select>
+
+      <input
+        type="text"
+        placeholder="Image URL"
+        value={image}
+        onChange={(e) => setImage(e.target.value)}
+        className="border-2 border-yellow-600 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 placeholder-gray-400 text-black"
+      />
+
+      <button
+        type="submit"
+        className="bg-yellow-600 text-white font-bold py-3 rounded-xl shadow-lg hover:scale-105 hover:shadow-yellow-400 transition-transform"
+      >
+        Add Food
+      </button>
+    </form>
+  </div>
+)}
+
 
            
             {modal === "edit" && selectedFood && (
@@ -131,7 +215,7 @@ function AdminPanel() {
               <div className="flex flex-col space-y-4">
                 <h2 className="text-2xl font-bold text-red-500 text-center">Remove Food</h2>
                 <p className="text-center">Are you sure you want to delete <span className="font-bold">{selectedFood.name}</span>?</p>
-                <button className="bg-red-500 text-white font-bold py-3 rounded-xl shadow-lg hover:scale-105 transition-transform">Delete Food</button>
+                <button onClick={() => {deletFood(selectedFood.id); setModal(null)}} className="bg-red-500 text-white font-bold py-3 rounded-xl shadow-lg hover:scale-105 transition-transform">Delete Food</button>
               </div>
             )}
 

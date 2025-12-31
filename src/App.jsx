@@ -1,5 +1,4 @@
 import { Route, Routes} from 'react-router-dom'
-import { useState } from 'react'
 import './App.css'
 import Willcome from './Pages/Willcome'
 import BrekFast from './Components/BrekFast'
@@ -7,19 +6,18 @@ import LunchAndDinner from './Components/LunchAndDinner'
 import Drinks from './Components/Drinks'
 import MenusPage from './Pages/MenusPage'
 import AdminPenal from './Admin/AdminPenal'
-import foodsData from './Data/foods.json'
 import SignUp from './Pages/SignUp'
 function App() {
-    const [foods, setFoods] = useState(foodsData);
+
   return (
     <div>
 
       <Routes>
-        <Route path='/admin' element={<AdminPenal foods = {foods} setFoods={setFoods} />}></Route>
+        <Route path='/admin' element={<AdminPenal />}></Route>
         <Route path='/' element={<Willcome />}></Route>
         <Route path='/menus' element={<MenusPage />}></Route>
-        <Route path='/breakfast' element={<BrekFast foods = {foods} />}></Route>
-        <Route path='/lunch' element={<LunchAndDinner foods = {foods} />}></Route>
+        <Route path='/breakfast' element={<BrekFast />}></Route>
+        <Route path='/lunch' element={<LunchAndDinner />}></Route>
         <Route path='/drinks' element={<Drinks/>}></Route>
         <Route path='/login' element={<SignUp />}></Route>
       </Routes>
