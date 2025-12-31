@@ -1,11 +1,17 @@
-import { useState } from "react";
-import foods from '../Data/foods.json';
+import { useState, useEffect } from "react";
 
 function Drinks() {
-  const [quantities, setQuantities] = useState({});
-  const [cart, setCart] = useState({});
-  const [table, setTable] = useState("");
-
+   const [foods , setFoods] = useState([])
+    const [quantities, setQuantities] = useState({});
+    const [cart, setCart] = useState({});
+    const [table, setTable] = useState("");
+  
+    useEffect(() => {
+      const data = localStorage.getItem('FoodData');
+      if(data) {
+        setFoods(JSON.parse(data))
+      }
+    }, [])
  
   const increase = (id) => {
     const current = quantities[id] || 1;
@@ -36,7 +42,6 @@ function Drinks() {
     alert("Order placed successfully ✅");
   };
 
-  
   const drinks = foods.filter(food => food.category === "Drinks");
 
   return (
