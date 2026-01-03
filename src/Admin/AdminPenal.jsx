@@ -21,6 +21,7 @@ function AdminPanel() {
   const [category, setCategory] = useState('');
   const [image, setImage] = useState('');
   const [enterFoodData, setEnterFoodData] = useState(() => foodDataStorage());
+  const [search, setSearch] = useState('');
 
   useEffect(()=>{
 
@@ -42,6 +43,12 @@ function AdminPanel() {
    setEnterFoodData(pre => [...pre,{...foodData}])
 
       console.log(foodData)
+
+      alert('Your Food Was Successfully added')
+        setName('');
+        setPrice('');
+        setCategory('');
+        setImage('');
         }
   
 
@@ -89,10 +96,18 @@ function AdminPanel() {
 
   setModal(null);
   setSelectedFood(null);
+  alert('Your Was Food Sucssefully Updated')
+
+        setName('');
+        setPrice('');
+        setCategory('');
+        setImage('');
 };
 
 
-
+const filteredFoods = enterFoodData.filter(food =>
+  food.name.toLowerCase().includes(search.toLowerCase())
+);
 
   
 
@@ -111,11 +126,7 @@ function AdminPanel() {
 
       
       <div className="w-full max-w-5xl mt-8">
-        <input
-          type="text"
-          placeholder="Search food by name..."
-          className="w-full border-2 border-yellow-600 rounded-xl px-4 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-yellow-500 text-black"
-        />
+        <input type="text" placeholder="Search food by name..." value={search} onChange={(e) => setSearch(e.target.value)} className="w-full border-2 border-yellow-600 rounded-xl px-4 py-3 mb-4 focus:outline-none focus:ring-2 focus:ring-yellow-500 text-black"/>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse bg-white rounded-xl shadow-lg">
@@ -129,7 +140,7 @@ function AdminPanel() {
               </tr>
             </thead>
             <tbody>
-              {enterFoodData.map((food, index) => (
+              {filteredFoods.map((food, index) => (
                 <tr key={index} className="border-b hover:bg-yellow-50 transition">
                   <td className="p-3 text-gray-800">{food.name}</td>
                   <td className="p-3 text-gray-800">{food.price + '$'}</td>
