@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const items = []
 
@@ -12,7 +14,6 @@ return data?JSON.parse(data):items;
 console.log(err.message)
 return items
    }
-   
 }
 function AdminPanel() {
 
@@ -44,7 +45,7 @@ function AdminPanel() {
 
       console.log(foodData)
 
-      alert('Your Food Was Successfully added')
+      toast.success('Your Food Was Successfully added')
         setName('');
         setPrice('');
         setCategory('');
@@ -80,15 +81,7 @@ function AdminPanel() {
 
   const updateFood = () => {
   const updatedFoods = enterFoodData.map((food) =>
-    food.id === selectedFood.id
-      ? {
-          ...food,
-          name,
-          price,
-          category,
-          image,
-        }
-      : food
+    food.id === selectedFood.id ? {...food, name, price, category, image,} : food
   );
 
   setEnterFoodData(updatedFoods);
@@ -96,12 +89,17 @@ function AdminPanel() {
 
   setModal(null);
   setSelectedFood(null);
-  alert('Your Was Food Sucssefully Updated')
-
+  
         setName('');
         setPrice('');
         setCategory('');
         setImage('');
+
+      if(name == '' || price == '' || category == '' || image == ''){
+        toast.warn('Please fill the all blanks')
+      } else{
+          toast.success('Your Was Food Sucssefully Updated')
+      }
 };
 
 
@@ -122,6 +120,7 @@ const filteredFoods = enterFoodData.filter(food =>
      
       <div className="flex space-x-6">
          <button onClick={() => setModal("add")} className='bg-yellow-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:scale-105 hover:shadow-yellow-400 transition-transform'>Add Food</button>
+        <Link to='/history' className="bg-yellow-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:scale-105 hover:shadow-yellow-400 transition-transform">Order History</Link>
        </div>
 
       
@@ -283,7 +282,7 @@ const filteredFoods = enterFoodData.filter(food =>
             {modal === "remove" && selectedFood && (
               <div className="flex flex-col space-y-4">
                 <h2 className="text-2xl font-bold text-red-500 text-center">Remove Food</h2>
-                <p className="text-center">Are you sure you want to delete <span className="font-bold">{selectedFood.name}</span>?</p>
+                <p className="text-center text-black">Are you sure you want to delete <span className="font-bold">{selectedFood.name}</span>?</p>
                 <button onClick={() => {deletFood(selectedFood.id); setModal(null)}} className="bg-red-500 text-white font-bold py-3 rounded-xl shadow-lg hover:scale-105 transition-transform">Delete Food</button>
               </div>
             )}

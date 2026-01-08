@@ -9,6 +9,9 @@ import MenusPage from './Pages/MenusPage';
 import AdminPenal from './Admin/AdminPenal';
 import SignUp from './Pages/SignUp';
 import ProtectedRoute from'./Admin/ProtectedRoute';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import OrderHistory from './Admin/OrderHistory';
 
 export const ItemsContext = createContext();
 
@@ -20,6 +23,16 @@ function App() {
 
   return (
     <ItemsContext.Provider value={{ login, isAuth, setIsAuth }}>
+       
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+        theme="light"
+      />
       <Routes>
         <Route path='/' element={<Willcome />} />
         <Route path='/menus' element={<MenusPage />} />
@@ -27,10 +40,9 @@ function App() {
         <Route path='/lunch' element={<LunchAndDinner />} />
         <Route path='/drinks' element={<Drinks />} />
         <Route path='/login' element={<SignUp />} />
-        <Route path='/admin' element={  <ProtectedRoute isAuth={isAuth}> <AdminPenal /> </ProtectedRoute>
-          } 
-        />
-      </Routes>
+        <Route path='/admin' element={  <ProtectedRoute isAuth={isAuth}> <AdminPenal /> </ProtectedRoute>} />
+        <Route path='/history' element={  <ProtectedRoute isAuth={isAuth}> <OrderHistory /> </ProtectedRoute>} />
+        </Routes>
     </ItemsContext.Provider>
   );
 }

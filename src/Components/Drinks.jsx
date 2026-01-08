@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import { toast } from "react-toastify";
 
 function Drinks() {
    const [foods , setFoods] = useState([])
@@ -37,11 +37,11 @@ function Drinks() {
 
  
   const orderNow = () => {
-    if (!table) return alert("Please select a table number");
-    if (Object.keys(cart).length === 0) return alert("No food added");
+    if (!table) return toast.error("Please select a table number");
+    if (Object.keys(cart).length === 0) return toast.error("No food added");
 
     console.log({ table, items: Object.values(cart) });
-    alert("Order placed successfully ✅");
+    toast.success("Order placed successfully ✅");
   };
 
   const drinks = foods.filter(food => food.category === "Drinks");
